@@ -1,0 +1,21 @@
+{
+  "name": "units",
+  "version": "1.0.0",
+  "description": "Units library, similar to mathjs#unit",
+  "main": "dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://stantec_jrwalton@bitbucket.org/stantec_jrwalton/units.git"
+  },
+  "scripts": {
+    "test": "jest --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jest": "^20.0.4",
+    "jest": "^20.0.4",
+    "typescript": "^2.4.1"
+  }
+}
