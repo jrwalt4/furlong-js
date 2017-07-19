@@ -2,12 +2,13 @@
   "name": "units",
   "version": "1.0.0",
   "description": "Units library, similar to mathjs#unit",
-  "main": "dist/index.js",
+  "main": "dist/Unit.js",
   "repository": {
     "type": "git",
     "url": "https://stantec_jrwalton@bitbucket.org/stantec_jrwalton/units.git"
   },
   "scripts": {
+    "build": "tsc",
     "test": "jest --watch"
   },
   "keywords": [],
@@ -17,5 +18,12 @@
     "@types/jest": "^20.0.2",
     "jest": "^20.0.2",
     "typescript": "^2.4.1"
+  },
+  "jest": {
+    "moduleFileExtensions": ["ts", "js"],
+    "transform":{
+      ".ts":"./preprocessor.js"
+    },
+    "testMatch":["**/*.spec.ts"]
   }
 }
