@@ -1,4 +1,4 @@
-export type Dimensions = [number, number, number, number];
+import { Dimensions } from './Dimensions';
 
 export class Unit {
 
@@ -18,19 +18,10 @@ export class Unit {
     throw new Error('Note implemented yet');
   }
 
-  private dimensions: Dimensions = [0, 0, 0, 0];
+  private dimensions: Dimensions;
   private conversion: number;
 
-  constructor(private value: number, private unit?: string) {
-    let preset: IPreset = presets.unitless;
-    if (unit) {
-      if (unit in presets) {
-        preset = presets[unit];
-      }
-    }
-    this.dimensions = preset.dimensions.slice() as Dimensions;
-    this.conversion = preset.conversion;
-  }
+  constructor(private value: number, private unit?: string) {}
 
   public add(other: Unit): Unit {
     return Unit.addUnits(this, other);
@@ -40,22 +31,3 @@ export class Unit {
     throw new Error('Note implemented yet');
   }
 }
-
-interface IPreset {
-  prefix: string;
-  dimensions: Dimensions;
-  conversion: number;
-}
-
-const presets: { [prefix: string]: IPreset } = {
-  unitless: {
-    prefix: '',
-    dimensions: [0, 0, 0, 0],
-    conversion: 1
-  },
-  ft: {
-    prefix: 'ft',
-    dimensions: [0, 1, 0, 0],
-    conversion: 304.8
-  }
-};
