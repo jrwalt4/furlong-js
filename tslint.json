@@ -5,15 +5,43 @@
     ],
     "jsRules": {},
     "rules": {
+        "eofline": true,
+        "max-line-length": [
+            true,
+            120
+        ],
+        "no-unused-variable": [
+            true
+        ],
+        "object-literal-sort-keys": [
+            false
+        ],
+        "ordered-imports": [
+            false
+        ],
         "quotemark": [
             true,
             "single"
         ],
+        "prefer-const": false,
+        "no-console": [
+            false
+        ],
         "trailing-comma": [
             false
         ],
-        "object-literal-sort-keys": [
-            false
+        "whitespace": [
+            true,
+            "check-type"
+        ],
+        "typedef": [
+            true,
+            "member-variable-declaration",
+            "variable-declaration",
+            "parameter"
+        ],
+        "typedef-whitespace": [
+            true
         ]
     },
     "rulesDirectory": []

@@ -1,33 +1,25 @@
 import { Dimensions } from './Dimensions';
 
 export class Unit {
+  constructor(
+    public readonly conversion: number,
+    public readonly dimensions: Dimensions,
+    public readonly prefix: string
+  ) { }
 
-  public static addUnits(unit1: Unit, unit2: Unit, unitType?: string): Unit {
-    return new Unit(unit1.value + unit2.value, unitType);
+  public canAddWith({ dimensions }: Unit): boolean {
+    return this.dimensions.every((dimension: number, index: number) => dimension === dimensions[index]);
   }
 
-  public static subUnits() {
-    throw new Error('Note implemented yet');
+  public format(): string {
+    return this.prefix;
   }
 
-  public static mulUnits() {
-    throw new Error('Note implemented yet');
-  }
-
-  public static divUnits() {
-    throw new Error('Note implemented yet');
-  }
-
-  private dimensions: Dimensions;
-  private conversion: number;
-
-  constructor(private value: number, private unit?: string) {}
-
-  public add(other: Unit): Unit {
-    return Unit.addUnits(this, other);
-  }
-
-  public pow(power: number): Unit {
-    throw new Error('Note implemented yet');
+  public invert(): Unit {
+    return new Unit(
+      1 / this.conversion,
+      this.dimensions.map((dim: number) => -1 * dim),
+      this.prefix ? (this.prefix.startsWith('/') ? this.prefix.substring(1) : '/' + this.prefix) : ''
+    );
   }
 }

@@ -1,4 +1,5 @@
 import * as Dimensions from './Dimensions';
+import { Unit } from './Unit';
 
 export interface IUnitTypeDef {
   prefix: string;
@@ -6,19 +7,11 @@ export interface IUnitTypeDef {
   dimensions: Dimensions.Dimensions;
 }
 
-export const UNITLESS = {
-  prefix: '',
-  conversion: 1,
-  dimensions: Dimensions.UNITLESS
-};
+export const UNITLESS: Unit = new Unit(1, Dimensions.NONE, '');
 
-export const FEET = {
-  prefix: 'ft',
-  conversion: 0.3048,
-  dimensions: Dimensions.LENGTH
-};
+export const FEET: Unit = new Unit(0.3048, Dimensions.LENGTH, 'ft');
 
-export const METER = {
+export const METER: IUnitTypeDef = {
   prefix: 'm',
   conversion: 1,
   dimensions: Dimensions.LENGTH

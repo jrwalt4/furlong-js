@@ -1,6 +1,6 @@
 export type Dimensions = [number, number, number, number] | number[];
 
-export enum DimensionOffset {
+export const enum DimensionOffset {
   MASS = 0,
   LENGTH,
   TIME,
@@ -8,11 +8,13 @@ export enum DimensionOffset {
 }
 
 /* Unitless dimensions */
-export const UNITLESS: Dimensions = [0, 0, 0, 0];
+export const NONE: Dimensions = [0, 0, 0, 0];
 
 /* Base dimensions */
 export const MASS: Dimensions = [1, 0, 0, 0];
 export const LENGTH: Dimensions = [0, 1, 0, 0];
+export const AREA: Dimensions = [0, 2, 0, 0];
+export const VOLUME: Dimensions = [0, 3, 0, 0];
 export const TIME: Dimensions = [0, 0, 1, 0];
 export const TEMPERATURE: Dimensions = [0, 0, 0, 1];
 
