@@ -16,6 +16,9 @@
         "object-literal-sort-keys": [
             false
         ],
+        "one-variable-per-declaration": [
+            false
+        ],
         "ordered-imports": [
             false
         ],
@@ -35,7 +38,7 @@
             "check-type"
         ],
         "typedef": [
-            true,
+            false,
             "member-variable-declaration",
             "variable-declaration",
             "parameter"
