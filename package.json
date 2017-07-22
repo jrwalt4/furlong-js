@@ -20,10 +20,15 @@
     "typescript": "^2.4.1"
   },
   "jest": {
-    "moduleFileExtensions": ["ts", "js"],
-    "transform":{
-      ".ts":"./preprocessor.js"
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ],
+    "transform": {
+      ".ts": "./preprocessor.js"
     },
-    "testMatch":["**/*.spec.ts"]
+    "testMatch": [
+      "**/*.spec.ts"
+    ]
   }
 }
