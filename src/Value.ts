@@ -38,9 +38,4 @@ export class Value {
   private reduceUnits(): Unit {
     return this.units.reduce((previous, current) => previous ? previous.multipliedBy(current) : current);
   }
-  private reduceUnitDimensions(): Dimensions {
-    return this.units.reduce((cumulativeDimensions, { dimensions }: Unit) => {
-      return dimensions.map((dim, i) => dim + cumulativeDimensions[i]);
-    }, NONE);
-  }
 }
