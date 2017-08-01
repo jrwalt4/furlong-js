@@ -10,6 +10,9 @@
             true,
             120
         ],
+        "no-namespace": [
+            false
+        ],
         "no-unused-variable": [
             true
         ],

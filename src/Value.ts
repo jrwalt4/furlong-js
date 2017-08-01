@@ -1,41 +1,42 @@
 import { Unit } from './Unit';
 import * as BaseUnits from './BaseUnits';
-import { Dimensions, NONE } from './Dimensions';
+import { IDimensions, NONE } from './Dimensions';
+import { IUnit } from './IUnit';
 
 export class Value {
-  private units: Unit[];
+
   private value: number;
-  constructor(value: number, units: Unit | Unit[] = BaseUnits.UNITLESS) {
-    this.value = value;
-    this.units = Array.isArray(units) ? units : [units];
+
+  constructor(value: number = 0, private unit: IUnit = BaseUnits.UNITLESS) {
+    this.value = value * unit.conversion;
   }
+
   public add(value: Value): Value {
-    let thisUnits = this.reduceUnits();
-    let otherUnits = value.reduceUnits();
-    if(thisUnits.isCompatibleWith(otherUnits)) {
-      return new Value(
-        (this.value * thisUnits.conversion + value.value * otherUnits.conversion)/thisUnits.conversion,
-        this.units);
+    if (this.unit.isCompatibleWith(value.unit)) {
+      return new Value(this.value + value.value, this.unit);
     }
     throw new TypeError('Units are not compatible');
   }
+
   public to(unit: Unit): Value {
-    let units = this.reduceUnits();
-    let baseValue = this.value * units.conversion;
-    return new Value(baseValue / unit.conversion, unit);
+    if (this.unit.isCompatibleWith(unit)) {
+      // find a way of passing value directly
+      return new Value(this.value / unit.conversion, unit);
+    }
+    throw new TypeError('Units are not compatible');
   }
   public toNumber(unit?: Unit): number {
-    if(unit) {
-      return unit.equals(this.reduceUnits()) ? this.value : this.to(unit).value;
+    if (unit && this.unit.isCompatibleWith(unit)) {
+      return this.value / unit.conversion;
     }
+    return this.value / this.unit.conversion;
+  }
+
+  public format(): string {
+    return String(this.value / this.unit.conversion) + this.unit.format();
+  }
+
+  public valueOf(): number {
     return this.value;
-  }
-  private reduceToBaseNumber(): number {
-    return this.value * this.units.reduce((reduction: number, unit: Unit) => {
-      return reduction * unit.conversion;
-    }, 1);
-  }
-  private reduceUnits(): Unit {
-    return this.units.reduce((previous, current) => previous ? previous.multipliedBy(current) : current);
   }
 }

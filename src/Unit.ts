@@ -1,32 +1,27 @@
-import { Dimensions, DimensionOffset } from './Dimensions';
+import { IDimensions, equalDimensions, multiplyDimensions, divideDimensions } from './Dimensions';
+import * as Dimensions from './Dimensions';
+import { IUnit } from './IUnit';
+import { ComplexUnit } from './ComplexUnit';
 
-export class Unit {
-  private mass: number;
-  private length: number;
-  private time: number;
-  private temperature: number;
+export class Unit implements IUnit {
+
   constructor(
-    public readonly conversion: number,
-    dimensions: Dimensions,
-    public readonly prefix: string
-  ) {
-    this.mass = dimensions[DimensionOffset.MASS] || 0;
-    this.length = dimensions[DimensionOffset.LENGTH] || 0;
-    this.time = dimensions[DimensionOffset.TIME] || 0;
-    this.temperature = dimensions[DimensionOffset.TEMPERATURE] || 0;
-  }
+    public readonly prefix: string,
+    public readonly dimensions: IDimensions,
+    public readonly conversion: number = 1,
+    public readonly offset: number = 0
+  ) { }
 
   public isCompatibleWith(unit: Unit): boolean {
-    return (
-      this.mass === unit.mass &&
-      this.length === unit.length &&
-      this.time === unit.time &&
-      this.temperature === unit.temperature
-    );
+    return equalDimensions(this.dimensions, unit.dimensions);
   }
 
   public equals(otherUnit: Unit): boolean {
-    return this.isCompatibleWith(otherUnit) && this.conversion === otherUnit.conversion;
+    return (
+      this.isCompatibleWith(otherUnit) &&
+      this.conversion === otherUnit.conversion &&
+      this.offset === otherUnit.offset
+    );
   }
 
   public format(): string {
@@ -34,41 +29,43 @@ export class Unit {
   }
 
   public invert(): Unit {
-    let dimensions: Dimensions = [];
-    dimensions[DimensionOffset.MASS] = this.mass * -1;
-    dimensions[DimensionOffset.LENGTH] = this.length * -1;
-    dimensions[DimensionOffset.TIME] = this.time * -1;
-    dimensions[DimensionOffset.TEMPERATURE] = this.temperature * -1;
+    let dimensions: IDimensions = {
+      mass: this.dimensions.mass * -1,
+      length: this.dimensions.length * -1,
+      time: this.dimensions.time * -1,
+      temperature: this.dimensions.temperature * -1,
+    };
     return new Unit(
+      this.prefix ? (this.prefix.startsWith('/') ? this.prefix.substring(1) : '/' + this.prefix) : '',
+      dimensions,
       1 / this.conversion,
-      dimensions,
-      this.prefix ? (this.prefix.startsWith('/') ? this.prefix.substring(1) : '/' + this.prefix) : ''
+      this.offset
     );
   }
 
-  public multipliedBy(unit: Unit): Unit {
-    let dimensions: Dimensions = [];
-    dimensions[DimensionOffset.MASS] = this.mass + unit.mass;
-    dimensions[DimensionOffset.LENGTH] = this.length + unit.length;
-    dimensions[DimensionOffset.TIME] = this.time + unit.time;
-    dimensions[DimensionOffset.TEMPERATURE] = this.temperature + unit.temperature;
-    return new Unit(
-      this.conversion * unit.conversion,
-      dimensions,
-      this.prefix + '-' + unit.prefix
-    );
+  public multiplyBy(unit: Unit): Unit {
+    return new ComplexUnit([{ unit: this, power: 1 }, { unit, power: 1 }]);
   }
 
-  public dividedBy(unit: Unit): Unit {
-    let dimensions: Dimensions = [];
-    dimensions[DimensionOffset.MASS] = this.mass - unit.mass;
-    dimensions[DimensionOffset.LENGTH] = this.length - unit.length;
-    dimensions[DimensionOffset.TIME] = this.time - unit.time;
-    dimensions[DimensionOffset.TEMPERATURE] = this.temperature - unit.temperature;
-    return new Unit(
-      this.conversion / unit.conversion,
-      dimensions,
-      this.prefix + '/' + unit.prefix
-    );
+  public divideBy(unit: Unit): Unit {
+    return new ComplexUnit([{ unit: this, power: 1 }, { unit, power: -1 }]);
   }
+}
+
+export namespace Unit {
+
+  export const UNITLESS = new Unit('', Dimensions.NONE, 1);
+  export const DOZEN = new Unit('doz', Dimensions.NONE, 12);
+
+  const FEET_TO_METERS = 0.3048; // 3.208 ft / m
+  export const FEET = new Unit('ft', Dimensions.LENGTH, FEET_TO_METERS);
+  export const SQUARE_FEET = new Unit('ft^2', Dimensions.AREA, FEET_TO_METERS ** 2);
+  export const CUBIC_FEET = new Unit('ft^3', Dimensions.VOLUME, FEET_TO_METERS ** 3);
+  const GALLONS_TO_CUBIC_FEET = 0.13369; // 7.48 gallons / 1 ft^3
+  export const GALLON = new Unit('gal', Dimensions.VOLUME, GALLONS_TO_CUBIC_FEET * FEET_TO_METERS ** 3);
+
+  export const METER = new Unit('m', Dimensions.LENGTH, 1);
+  export const SQUARE_METER = new Unit('m^2', Dimensions.AREA, 1);
+  export const CUBIC_METER = new Unit('m^3', Dimensions.VOLUME, 1);
+
 }

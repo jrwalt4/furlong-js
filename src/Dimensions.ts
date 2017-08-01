@@ -1,24 +1,81 @@
-export type Dimensions = [number, number, number, number] | number[];
+export interface IDimensions {
+  mass: number;
+  length: number;
+  time: number;
+  temperature: number;
+}
 
-export const enum DimensionOffset {
-  MASS = 0,
-  LENGTH,
-  TIME,
-  TEMPERATURE
+export function equalDimensions(dimensions1: IDimensions, dimensions2: IDimensions): boolean {
+  return (
+    dimensions1.mass === dimensions2.mass &&
+    dimensions1.length === dimensions2.length &&
+    dimensions1.time === dimensions2.time &&
+    dimensions1.temperature === dimensions2.temperature
+  );
+}
+
+export function multiplyDimensions(dimensions1: IDimensions, dimensions2: IDimensions): IDimensions {
+  return {
+    mass: dimensions1.mass + dimensions2.mass,
+    length: dimensions2.length + dimensions1.length,
+    time: dimensions1.time + dimensions2.time,
+    temperature: dimensions1.temperature + dimensions2.temperature
+  };
+}
+
+export function powerDimensions(dimensions: IDimensions, power: number): IDimensions {
+  return {
+    mass: dimensions.mass * power,
+    length: dimensions.length * power,
+    time: dimensions.time * power,
+    temperature: dimensions.temperature * power
+  };
+}
+
+export function divideDimensions(dimensions1: IDimensions, dimensions2: IDimensions): IDimensions {
+  return {
+    mass: dimensions1.mass - dimensions2.mass,
+    length: dimensions2.length - dimensions1.length,
+    time: dimensions1.time - dimensions2.time,
+    temperature: dimensions1.temperature - dimensions2.temperature
+  };
 }
 
 /* Unitless dimensions */
-export const NONE: Dimensions = [0, 0, 0, 0];
+export const NONE: IDimensions = {
+  mass: 0, length: 0, time: 0, temperature: 0
+};
 
 /* Base dimensions */
-export const MASS: Dimensions = [1, 0, 0, 0];
-export const LENGTH: Dimensions = [0, 1, 0, 0];
-export const AREA: Dimensions = [0, 2, 0, 0];
-export const VOLUME: Dimensions = [0, 3, 0, 0];
-export const TIME: Dimensions = [0, 0, 1, 0];
-export const TEMPERATURE: Dimensions = [0, 0, 0, 1];
+export const MASS: IDimensions = {
+  mass: 1, length: 0, time: 0, temperature: 0
+};
+export const LENGTH: IDimensions = {
+  mass: 0, length: 1, time: 0, temperature: 0
+};
+export const AREA: IDimensions = {
+  mass: 0, length: 2, time: 0, temperature: 0
+};
+export const VOLUME: IDimensions = {
+  mass: 0, length: 3, time: 0, temperature: 0
+};
+export const TIME: IDimensions = {
+  mass: 0, length: 0, time: 1, temperature: 0
+};
+export const TEMPERATURE: IDimensions = {
+  mass: 0, length: 0, time: 0, temperature: 1
+};
 
 /* Derived dimensions */
-export const SPEED: Dimensions = [0, 1, -1, 0];
-export const FLOW: Dimensions = [0, 3, -1, 0];
-export const WEIGHT: Dimensions = [1, 1, -2, 0];
+export const SPEED: IDimensions = {
+  mass: 0, length: 1, time: -1, temperature: 0
+};
+export const ACCELERATION: IDimensions = {
+  mass: 0, length: 1, time: -2, temperature: 0
+};
+export const VOLUMETRIC_FLOW: IDimensions = {
+  mass: 0, length: 3, time: -1, temperature: 0
+};
+export const WEIGHT: IDimensions = {
+  mass: 1, length: 1, time: -2, temperature: 0
+};
