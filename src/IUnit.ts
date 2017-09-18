@@ -7,6 +7,8 @@ export interface IUnit {
   offset: number;
   equals(unit: IUnit): boolean;
   isCompatibleWith(unit: IUnit): boolean;
+  toBase(value: number): number;
+  fromBase(value: number): number;
   format(): string;
   invert(): IUnit;
   multiplyBy(unit: IUnit): IUnit;

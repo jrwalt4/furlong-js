@@ -42,6 +42,12 @@ export class ComplexUnit implements IUnit {
   public isCompatibleWith(unit: IUnit): boolean {
     return Unit.prototype.isCompatibleWith.call(this, unit);
   }
+  public toBase(value: number): number {
+    return value * this.conversion;
+  }
+  public fromBase(value: number): number {
+    return value / this.conversion;
+  }
   public format(): string {
     return this.prefix;
   }

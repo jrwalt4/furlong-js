@@ -1,4 +1,10 @@
-import { IDimensions, equalDimensions, multiplyDimensions, divideDimensions } from './Dimensions';
+import {
+  IDimensions,
+  equalDimensions,
+  multiplyDimensions,
+  divideDimensions,
+  powerDimensions
+} from './Dimensions';
 import * as Dimensions from './Dimensions';
 import { IUnit } from './IUnit';
 import { ComplexUnit } from './ComplexUnit';
@@ -24,17 +30,20 @@ export class Unit implements IUnit {
     );
   }
 
+  public toBase(value: number): number {
+    return value * this.conversion;
+  }
+
+  public fromBase(value: number): number {
+    return value / this.conversion;
+  }
+
   public format(): string {
     return this.prefix;
   }
 
   public invert(): Unit {
-    let dimensions: IDimensions = {
-      mass: this.dimensions.mass * -1,
-      length: this.dimensions.length * -1,
-      time: this.dimensions.time * -1,
-      temperature: this.dimensions.temperature * -1,
-    };
+    let dimensions: IDimensions = powerDimensions(this.dimensions, -1);
     return new Unit(
       this.prefix ? (this.prefix.startsWith('/') ? this.prefix.substring(1) : '/' + this.prefix) : '',
       dimensions,
