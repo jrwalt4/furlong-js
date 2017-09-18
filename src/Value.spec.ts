@@ -1,5 +1,5 @@
 import { Value } from './Value';
-import { UNITLESS, FEET, METER } from './BaseUnits';
+import { UNITLESS, FEET, METER } from './UnitList';
 
 let v1: Value, v2: Value;
 

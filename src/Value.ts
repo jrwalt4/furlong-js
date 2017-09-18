@@ -1,7 +1,6 @@
 import { Unit } from './Unit';
-import * as BaseUnits from './BaseUnits';
+import * as Units from './UnitList';
 import { IDimensions, NONE } from './Dimensions';
-import { IUnit } from './IUnit';
 
 export class Value {
 
@@ -13,9 +12,9 @@ export class Value {
   /**
    * Units of the value
    */
-  private readonly unit: IUnit;
+  private readonly unit: Unit;
 
-  constructor(value: number = 0, unit: IUnit = BaseUnits.UNITLESS, isBaseUnit: boolean = false) {
+  constructor(value: number = 0, unit: Unit = Units.UNITLESS, isBaseUnit: boolean = false) {
     this.value = isBaseUnit ? value : unit.toBase(value);
     this.unit = unit;
   }
