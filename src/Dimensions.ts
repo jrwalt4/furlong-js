@@ -5,6 +5,20 @@ export interface IDimensions {
   temperature: number;
 }
 
+export function createDimension(
+  mass: number = 0,
+  length: number = 0,
+  time: number = 0,
+  temperature: number = 0
+): IDimensions {
+  return {
+    mass,
+    length,
+    time,
+    temperature
+  };
+}
+
 export function equalDimensions(dimensions1: IDimensions, dimensions2: IDimensions): boolean {
   return (
     dimensions1.mass === dimensions2.mass &&

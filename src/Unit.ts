@@ -1,12 +1,7 @@
 import {
   IDimensions,
-  equalDimensions,
-  multiplyDimensions,
-  divideDimensions,
-  powerDimensions
+  equalDimensions
 } from './Dimensions';
-import * as Dimensions from './Dimensions';
-import { ComplexUnit } from './ComplexUnit';
 
 export abstract class Unit {
 

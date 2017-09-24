@@ -12,6 +12,8 @@ export const CUBIC_FEET = new ComplexUnit([{ unit: FEET, power: 3 }]);
 const GALLONS_TO_CUBIC_FEET = 0.13369; // 7.48 gallons / 1 ft^3
 export const GALLON = new BaseUnit('gal', Dimensions.VOLUME, GALLONS_TO_CUBIC_FEET * FEET_TO_METERS ** 3);
 
+export const ACRES = new BaseUnit('acre', Dimensions.AREA, 43560 * FEET_TO_METERS ** 2);
+
 export const METER = new BaseUnit('m', Dimensions.LENGTH, 1);
 export const SQUARE_METER = new ComplexUnit([{ unit: METER, power: 2 }]);
 export const CUBIC_METER = new ComplexUnit([{ unit: METER, power: 3 }]);

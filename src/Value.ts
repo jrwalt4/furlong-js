@@ -1,6 +1,6 @@
 import { Unit } from './Unit';
 import * as Units from './UnitList';
-import { IDimensions, NONE } from './Dimensions';
+import { ComplexUnit } from './ComplexUnit';
 
 export class Value {
 
@@ -19,11 +19,34 @@ export class Value {
     this.unit = unit;
   }
 
+  public equals(other: Value): boolean {
+    return (Math.abs(this.value - other.value) < 0.001) && this.unit.isCompatibleWith(other.unit);
+  }
+
   public add(value: Value): Value {
     if (this.unit.isCompatibleWith(value.unit)) {
       return new Value(this.value + value.value, this.unit, true);
     }
     throw new TypeError('Units are not compatible');
+  }
+
+  public subtract(value: Value): Value {
+    if (this.unit.isCompatibleWith(value.unit)) {
+      return new Value(this.value - value.value, this.unit, true);
+    }
+    throw new TypeError('Units are not compatible');
+  }
+
+  public multiply(value: Value): Value {
+    return new Value(this.value * value.value, this.unit.multiplyBy(value.unit), true);
+  }
+
+  public divide(value: Value): Value {
+    return new Value(this.value / value.value, this.unit.divideBy(value.unit), true);
+  }
+
+  public power(power: number): Value {
+    return new Value(this.value ** power, new ComplexUnit([{ unit: this.unit, power }]));
   }
 
   public to(unit: Unit): Value {
@@ -36,7 +59,7 @@ export class Value {
   public toNumber(unit?: Unit): number {
     if (unit) {
       if (this.unit.isCompatibleWith(unit)) {
-        return this.value / unit.conversion;
+        return unit.fromBase(this.value);
       }
       throw new TypeError('Units are not compatible');
     }
@@ -44,7 +67,7 @@ export class Value {
   }
 
   public format(): string {
-    return String(this.value / this.unit.conversion) + this.unit.format();
+    return String(this.unit.fromBase(this.value)) + ' ' + this.unit.format();
   }
 
   public valueOf(): number {

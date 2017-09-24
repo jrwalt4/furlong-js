@@ -1,4 +1,4 @@
-import { IDimensions, equalDimensions, NONE, multiplyDimensions, powerDimensions } from './Dimensions';
+import { IDimensions, multiplyDimensions, powerDimensions, NONE } from './Dimensions';
 import { Unit } from './Unit';
 
 export interface IComplexUnitPart {
