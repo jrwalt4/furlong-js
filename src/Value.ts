@@ -23,6 +23,10 @@ export class Value {
     return (Math.abs(this.value - other.value) < 0.001) && this.unit.isCompatibleWith(other.unit);
   }
 
+  public is(other: Value): boolean {
+    return (Math.abs(this.value - other.value) < 0.001) && this.unit.equals(other.unit);
+  }
+
   public add(value: Value): Value {
     if (this.unit.isCompatibleWith(value.unit)) {
       return new Value(this.value + value.value, this.unit, true);

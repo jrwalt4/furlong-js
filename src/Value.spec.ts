@@ -5,13 +5,26 @@ let v1: Value, v2: Value;
 
 interface IMatchers extends jest.Matchers<void> {
   toEqualValue(value: Value): void;
+  toBeValue(value: Value): void;
 }
 
+interface IExpect extends jest.Expect {
+  (actual: any): IMatchers;
+}
+
+declare const expect: IExpect;
+
 expect.extend({
-  toEqualValue(recieved: Value, argument: Value) {
+  toEqualValue(recieved: Value, expected: Value) {
     return {
-      pass: recieved.equals(argument),
-      message: () => `Expected ${recieved.format()} to equal ${argument.format()}`
+      pass: recieved.equals(expected),
+      message: () => `Expected ${recieved.format()} to equal ${expected.format()}`
+    };
+  },
+  toBeValue(recieved: Value, expected: Value) {
+    return {
+      pass: recieved.is(expected),
+      message: () => `Expected ${recieved.format()} to be ${expected.format()}`
     };
   }
 });
@@ -30,34 +43,35 @@ it('Creates a value', () => {
 
 it('Tests equivalence', () => {
   let v12 = new Value(10, FEET);
-  expect(v1.equals(v12)).toBeTruthy();
+  expect(v1.is(v12)).toBeTruthy();
   let v22 = new Value(10, METER);
-  expect(v2.equals(v22)).toBeTruthy();
+  expect(v2.is(v22)).toBeTruthy();
   let areaSqFt = new Value(43560, SQUARE_FEET);
   let areaAcres = new Value(1, ACRES);
   expect(areaAcres.equals(areaSqFt)).toBeTruthy();
 });
 
 it('Adds values', () => {
-  (expect(v1.add(v2)) as IMatchers).toEqualValue(new Value(10 + 10 / 0.3048, FEET));
+  expect(v1.add(v2)).toBeValue(new Value(10 + 10 / 0.3048, FEET));
 });
 
 it('Subtracts values', () => {
-  expect(v1.subtract(v2).toNumber()).toBeCloseTo(10 - 10 / 0.3048, 0.001);
+  expect(v1.subtract(v2)).toBeValue(new Value(10 - 10 / 0.3048, FEET));
 });
 
 it('Multiplies values', () => {
-  expect(v1.multiply(v2).toNumber(SQUARE_FEET)).toBeCloseTo(10 * 10 / 0.3048, 0.001);
+  expect(v1.multiply(v2)).toEqualValue(new Value(10 * 10 / 0.3048, SQUARE_FEET));
 });
 
 it('Divides values', () => {
-  expect(v1.divide(v2).toNumber(UNITLESS)).toBeCloseTo(0.3048, 0.001);
+  expect(v1.divide(v2)).toEqualValue(new Value(0.3048, UNITLESS));
 });
 
 it('Casts to another unit', () => {
-  expect(v1.to(METER).toNumber()).toBeCloseTo(10 * 0.3048, 0.001);
+  expect(v1.to(METER)).toBeValue(new Value(10 * 0.3048, METER));
 });
 
 it('Prints the value', () => {
   expect(v1.format()).toEqual('10 ft');
+  expect(v2.format()).toEqual('10 m');
 });
