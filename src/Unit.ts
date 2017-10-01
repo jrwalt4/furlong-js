@@ -5,38 +5,39 @@ import {
 
 export abstract class Unit {
 
-  public abstract readonly prefix: string;
-  public abstract readonly dimensions: IDimensions;
-  public abstract readonly conversion: number;
-  public abstract readonly offset: number;
+  public abstract getDimensions(): IDimensions;
+
+  public abstract getConversion(): number;
+
+  public abstract getOffset(): number;
 
   public isCompatibleWith(unit: Unit): boolean {
-    return equalDimensions(this.dimensions, unit.dimensions);
+    return equalDimensions(this.getDimensions(), unit.getDimensions());
   }
 
   public equals(otherUnit: Unit): boolean {
     return (
       this.isCompatibleWith(otherUnit) &&
-      this.conversion === otherUnit.conversion &&
-      this.offset === otherUnit.offset
+      this.getConversion() === otherUnit.getConversion() &&
+      this.getOffset() === otherUnit.getOffset()
     );
   }
 
   public toBase(value: number): number {
-    return value * this.conversion;
+    return value * this.getConversion();
   }
 
   public fromBase(value: number): number {
-    return value / this.conversion;
+    return value / this.getConversion();
   }
 
-  public format(): string {
-    return this.prefix;
-  }
+  public abstract format(): string;
 
   public abstract invert(): Unit;
 
   public abstract multiplyBy(unit: Unit): Unit;
 
   public abstract divideBy(unit: Unit): Unit;
+
+  public abstract powerTo(power: number): Unit;
 }

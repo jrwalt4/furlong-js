@@ -17,3 +17,7 @@ export const ACRES = new BaseUnit('acre', Dimensions.AREA, 43560 * FEET_TO_METER
 export const METER = new BaseUnit('m', Dimensions.LENGTH, 1);
 export const SQUARE_METER = new ComplexUnit([{ unit: METER, power: 2 }]);
 export const CUBIC_METER = new ComplexUnit([{ unit: METER, power: 3 }]);
+
+export const SECOND = new BaseUnit('s', Dimensions.TIME, 1);
+export const MINUTE = new BaseUnit('m', Dimensions.TIME, 60);
+export const HOUR = new BaseUnit('hr', Dimensions.TIME, 3600);

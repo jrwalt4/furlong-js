@@ -38,11 +38,12 @@ export function multiplyDimensions(dimensions1: IDimensions, dimensions2: IDimen
 }
 
 export function powerDimensions(dimensions: IDimensions, power: number): IDimensions {
+  // use this method to prevent returning -0 as a dimension
   return {
-    mass: dimensions.mass * power,
-    length: dimensions.length * power,
-    time: dimensions.time * power,
-    temperature: dimensions.temperature * power
+    mass: dimensions.mass ? dimensions.mass * power : 0,
+    length: dimensions.length ? dimensions.length * power : 0,
+    time: dimensions.time ? dimensions.time * power : 0,
+    temperature: dimensions.temperature ? dimensions.temperature * power : 0
   };
 }
 

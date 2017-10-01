@@ -1,15 +1,15 @@
-import * as Dimensions from './Dimensions';
+import { IDimensions } from './Dimensions';
 import { Unit } from './Unit';
 import { ComplexUnit } from './ComplexUnit';
 
 export class BaseUnit extends Unit {
 
-  public prefix: string;
-  public dimensions: Dimensions.IDimensions;
-  public conversion: number;
-  public offset: number;
+  private prefix: string;
+  private dimensions: IDimensions;
+  private conversion: number;
+  private offset: number;
 
-  constructor(prefix: string, dimensions: Dimensions.IDimensions, conversion: number = 1, offset: number = 0) {
+  constructor(prefix: string, dimensions: IDimensions, conversion: number = 1, offset: number = 0) {
     super();
     this.prefix = prefix;
     this.dimensions = dimensions;
@@ -17,14 +17,21 @@ export class BaseUnit extends Unit {
     this.offset = offset;
   }
 
+  public getDimensions(): IDimensions {
+    return this.dimensions;
+  }
+  public getConversion(): number {
+    return this.conversion;
+  }
+  public getOffset(): number {
+    return this.offset;
+  }
+  public format(): string {
+    return this.prefix;
+  }
+
   public invert(): Unit {
-    let dimensions: Dimensions.IDimensions = Dimensions.powerDimensions(this.dimensions, -1);
-    return new BaseUnit(
-      this.prefix ? (this.prefix.startsWith('/') ? this.prefix.substring(1) : '/' + this.prefix) : '',
-      dimensions,
-      1 / this.conversion,
-      this.offset
-    );
+    return new ComplexUnit([{ unit: this, power: -1 }]);
   }
 
   public multiplyBy(unit: Unit): Unit {
@@ -35,4 +42,7 @@ export class BaseUnit extends Unit {
     return new ComplexUnit([{ unit: this, power: 1 }, { unit, power: -1 }]);
   }
 
+  public powerTo(power: number): Unit {
+    return new ComplexUnit([{ unit: this, power }]);
+  }
 }
