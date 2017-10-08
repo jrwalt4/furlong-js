@@ -29,6 +29,11 @@
     },
     "testMatch": [
       "**/*.spec.ts"
-    ]
+    ],
+    "verbose": true
+  },
+  "dependencies": {
+    "@types/lodash.groupby": "^4.6.3",
+    "lodash.groupby": "^4.6.0"
   }
 }

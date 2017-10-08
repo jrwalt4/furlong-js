@@ -1,5 +1,6 @@
 import { IDimensions, multiplyDimensions, powerDimensions, NONE } from './Dimensions';
 import { Unit } from './Unit';
+import { getNumAndDen } from './util';
 
 export interface IComplexUnitPart {
   unit: Unit;
@@ -29,16 +30,30 @@ export class ComplexUnit extends Unit {
     return 0; // if there's an offset in a complex unit, we have a problem
   }
   public format(): string {
-    return this.units.reduce((format: string, part: IComplexUnitPart) => {
-      let partFormat = part.unit.format();
-      partFormat = part.unit instanceof ComplexUnit ? `(${partFormat})` : partFormat;
-      partFormat += Math.abs(part.power) === 1 ? '' : `^${part.power}`;
-      if(format.length > 0) {
-        return part.power > 0 ? partFormat + '*' + format : format + '/'+partFormat;
-      } else {
+    let { numerator, denominator } = getNumAndDen(this.units.filter((u) => u.power !== 0));
+    let format: string[] = [];
+    if (numerator && numerator.length > 0) {
+      format.push(numerator.map(({ unit, power }) => {
+        let partFormat = unit.format();
+        if (unit instanceof ComplexUnit) {
+          partFormat = `(${partFormat})`;
+        }
+        partFormat += power > 1 ? `^${power}` : '';
         return partFormat;
-      }
-    }, '');
+      }).join('*'));
+    }
+    if (denominator && denominator.length > 0) {
+      format.push(denominator.map(({ unit, power }) => {
+        let partFormat = unit.format();
+        if (unit instanceof ComplexUnit) {
+          partFormat = `(${partFormat})`;
+        }
+        let denPower = Math.abs(power);
+        partFormat += denPower > 1 ? `^${denPower}` : '';
+        return partFormat;
+      }).join('/'));
+    }
+    return format.join('/');
   }
   public invert(): Unit {
     return new ComplexUnit(this.units.map(({ unit, power }) => ({ unit, power: power * -1 })));
