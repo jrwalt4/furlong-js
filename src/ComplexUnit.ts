@@ -9,11 +9,44 @@ export interface IComplexUnitPart {
 
 export class ComplexUnit extends Unit {
 
+  private static reduceToBaseUnits(units: IComplexUnitPart[]): IComplexUnitPart[] {
+    return units.reduce<IComplexUnitPart[]>((baseUnits, part) => {
+      let newPart: IComplexUnitPart | IComplexUnitPart[] = part;
+      if (part.unit instanceof ComplexUnit) {
+        newPart = ComplexUnit.reduceToBaseUnits(part.unit.units.map((subPart) => {
+          return {
+            unit: subPart.unit,
+            power: subPart.power * part.power
+          };
+        }));
+      }
+      return baseUnits.concat(newPart);
+    }, []);
+  }
+
+  private static reduceUnitPowers(units: IComplexUnitPart[]): IComplexUnitPart[] {
+    return units.reduce<IComplexUnitPart[]>((simplified, part) => {
+      let repeatUnitPart = simplified.find((simplePart) => {
+        return simplePart.unit.is(part.unit);
+      });
+      if (repeatUnitPart) {
+        repeatUnitPart.power += part.power;
+        // since we've changed the power of that part, return the same list
+        // (mutability... yuck)
+        // if the new power is 0, remove that part (it has been cancelled out)
+        return repeatUnitPart.power !== 0 ? simplified : simplified.filter((filterPart) => {
+          return part !== filterPart;
+        });
+      }
+      return simplified.concat(part);
+    }, []);
+  }
+
   private readonly units: IComplexUnitPart[];
 
   constructor(units: IComplexUnitPart[]) {
     super();
-    this.units = units;
+    this.units = ComplexUnit.reduceUnitPowers(ComplexUnit.reduceToBaseUnits(units));
   }
 
   public getDimensions(): IDimensions {

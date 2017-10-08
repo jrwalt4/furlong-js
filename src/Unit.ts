@@ -23,6 +23,10 @@ export abstract class Unit {
     );
   }
 
+  public is(otherUnit: Unit): boolean {
+    return this === otherUnit;
+  }
+
   public toBase(value: number): number {
     return value * this.getConversion();
   }
