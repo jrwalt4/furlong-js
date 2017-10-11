@@ -1,3 +1,5 @@
+import printf = require('printf');
+
 import { Unit } from './Unit';
 import * as Units from './UnitList';
 import { ComplexUnit } from './ComplexUnit';
@@ -70,8 +72,13 @@ export class Value {
     return this.unit.fromBase(this.value);
   }
 
-  public format(): string {
-    return String(this.unit.fromBase(this.value)) + ' ' + this.unit.format();
+  public format(format?: string): string {
+    let value = this.unit.fromBase(this.value);
+    let unitFormat = this.unit.format();
+    if(!format) {
+      format = Math.abs(Math.round(value) - value) < 0.0001 ? '%d %s' : '%f %s';
+    }
+    return printf(format, value, unitFormat);
   }
 
   public valueOf(): number {

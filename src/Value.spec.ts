@@ -74,4 +74,11 @@ it('Casts to another unit', () => {
 it('Prints the value', () => {
   expect(v1.format()).toEqual('10 ft');
   expect(v2.format()).toEqual('10 m');
+  let add = v1.add(new Value(0.5,FEET));
+  expect(add.format()).toMatch(/['10.5']\d{0,5} ft/);
+});
+
+it('Prints the value with provided format', () => {
+  expect(v1.format('%.3f')).toEqual('10.000');
+  expect(v1.format('%03.f %s')).toEqual('010 ft');
 });
