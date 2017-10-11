@@ -23,6 +23,9 @@ it('Combines unit formats', () => {
 
   let u3 = u1.multiplyBy(u2);
   expect(u3.format()).toEqual('ft^2/s^3');
+
+  let perFoot = new ComplexUnit([{ unit: FEET, power: -1 }]);
+  expect(perFoot.format()).toEqual('1/ft');
 });
 
 it('Reduces units when they cancel out', () => {

@@ -74,6 +74,8 @@ export class ComplexUnit extends Unit {
         partFormat += power > 1 ? `^${power}` : '';
         return partFormat;
       }).join('*'));
+    } else {
+      format.push('1');
     }
     if (denominator && denominator.length > 0) {
       format.push(denominator.map(({ unit, power }) => {
