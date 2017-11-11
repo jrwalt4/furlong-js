@@ -9,44 +9,11 @@ export interface IComplexUnitPart {
 
 export class ComplexUnit extends Unit {
 
-  private static reduceToBaseUnits(units: IComplexUnitPart[]): IComplexUnitPart[] {
-    return units.reduce<IComplexUnitPart[]>((baseUnits, part) => {
-      let newPart: IComplexUnitPart | IComplexUnitPart[] = part;
-      if (part.unit instanceof ComplexUnit) {
-        newPart = ComplexUnit.reduceToBaseUnits(part.unit.units.map((subPart) => {
-          return {
-            unit: subPart.unit,
-            power: subPart.power * part.power
-          };
-        }));
-      }
-      return baseUnits.concat(newPart);
-    }, []);
-  }
-
-  private static reduceUnitPowers(units: IComplexUnitPart[]): IComplexUnitPart[] {
-    return units.reduce<IComplexUnitPart[]>((simplified, part) => {
-      let repeatUnitPart = simplified.find((simplePart) => {
-        return simplePart.unit.is(part.unit);
-      });
-      if (repeatUnitPart) {
-        repeatUnitPart.power += part.power;
-        // since we've changed the power of that part, return the same list
-        // (mutability... yuck)
-        // if the new power is 0, remove that part (it has been cancelled out)
-        return repeatUnitPart.power !== 0 ? simplified : simplified.filter((filterPart) => {
-          return part !== filterPart;
-        });
-      }
-      return simplified.concat(part);
-    }, []);
-  }
-
-  private readonly units: IComplexUnitPart[];
+  public readonly units: IComplexUnitPart[];
 
   constructor(units: IComplexUnitPart[]) {
     super();
-    this.units = ComplexUnit.reduceUnitPowers(ComplexUnit.reduceToBaseUnits(units));
+    this.units = units;
   }
 
   public getDimensions(): IDimensions {
@@ -90,16 +57,5 @@ export class ComplexUnit extends Unit {
     }
     return format.join('/');
   }
-  public invert(): Unit {
-    return new ComplexUnit(this.units.map(({ unit, power }) => ({ unit, power: power * -1 })));
-  }
-  public multiplyBy(unit: Unit): Unit {
-    return new ComplexUnit([{ unit: this, power: 1 }, { unit, power: 1 }]);
-  }
-  public divideBy(unit: Unit): Unit {
-    return new ComplexUnit([{ unit: this, power: 1 }, { unit, power: -1 }]);
-  }
-  public powerTo(power: number): Unit {
-    return new ComplexUnit([{ unit: this, power }]);
-  }
+
 }

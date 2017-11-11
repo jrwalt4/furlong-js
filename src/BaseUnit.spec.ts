@@ -5,7 +5,7 @@ import { AREA, LENGTH } from './Dimensions';
 
 testCompatibility(FEET, METER);
 
-testCompatibility((new BaseUnit('null', LENGTH, 2)).powerTo(2), new BaseUnit('square null', AREA, 4));
+testCompatibility(new BaseUnit('sq null', AREA, 4), new BaseUnit('square null', AREA, 4));
 
 it('Prints unit format', () => {
   let u1 = new BaseUnit('foo', LENGTH, 1);

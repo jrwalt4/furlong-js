@@ -1,6 +1,5 @@
 import { IDimensions, fromDimensions } from './Dimensions';
 import { Unit } from './Unit';
-import { ComplexUnit } from './ComplexUnit';
 
 export class BaseUnit extends Unit {
 
@@ -30,19 +29,4 @@ export class BaseUnit extends Unit {
     return this.prefix;
   }
 
-  public invert(): Unit {
-    return new ComplexUnit([{ unit: this, power: -1 }]);
-  }
-
-  public multiplyBy(unit: Unit): Unit {
-    return new ComplexUnit([{ unit: this, power: 1 }, { unit, power: 1 }]);
-  }
-
-  public divideBy(unit: Unit): Unit {
-    return new ComplexUnit([{ unit: this, power: 1 }, { unit, power: -1 }]);
-  }
-
-  public powerTo(power: number): Unit {
-    return power === 1 ? this : new ComplexUnit([{ unit: this, power }]);
-  }
 }

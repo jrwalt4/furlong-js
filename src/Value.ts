@@ -3,6 +3,7 @@ import printf = require('printf');
 import { Unit } from './Unit';
 import * as Units from './UnitList';
 import { ComplexUnit } from './ComplexUnit';
+import { unitFromUnits } from './util';
 
 export class Value {
 
@@ -44,11 +45,11 @@ export class Value {
   }
 
   public multiply(value: Value): Value {
-    return new Value(this.value * value.value, this.unit.multiplyBy(value.unit), true);
+    return new Value(this.value * value.value, unitFromUnits(this.unit, value.unit), true);
   }
 
   public divide(value: Value): Value {
-    return new Value(this.value / value.value, this.unit.divideBy(value.unit), true);
+    return new Value(this.value / value.value, unitFromUnits(this.unit, value.unit, -1), true);
   }
 
   public power(power: number): Value {
@@ -75,7 +76,7 @@ export class Value {
   public format(format?: string): string {
     let value = this.unit.fromBase(this.value);
     let unitFormat = this.unit.format();
-    if(!format) {
+    if (!format) {
       format = Math.abs(Math.round(value) - value) < 0.0001 ? '%d %s' : '%f %s';
     }
     return printf(format, value, unitFormat);

@@ -37,11 +37,4 @@ export abstract class Unit {
 
   public abstract format(): string;
 
-  public abstract invert(): Unit;
-
-  public abstract multiplyBy(unit: Unit): Unit;
-
-  public abstract divideBy(unit: Unit): Unit;
-
-  public abstract powerTo(power: number): Unit;
 }

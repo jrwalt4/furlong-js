@@ -1,5 +1,4 @@
 import { Unit } from './Unit';
-import { powerDimensions } from './Dimensions';
 
 export function testCompatibility(u1: Unit, u2: Unit) {
   it('Should test compatibility', () => {
@@ -24,9 +23,4 @@ export function testUnit(unitConstructor: () => Unit) {
     expect(u1.isCompatibleWith(u2)).toBeTruthy();
   });
 
-  it('Inverts', () => {
-    let u1 = unitConstructor();
-    let u2 = u1.invert();
-    expect(u2.getDimensions()).toEqual(powerDimensions(u1.getDimensions(), -1));
-  });
 }
