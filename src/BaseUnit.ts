@@ -1,4 +1,4 @@
-import { IDimensions } from './Dimensions';
+import { IDimensions, fromDimensions } from './Dimensions';
 import { Unit } from './Unit';
 import { ComplexUnit } from './ComplexUnit';
 
@@ -9,10 +9,10 @@ export class BaseUnit extends Unit {
   private conversion: number;
   private offset: number;
 
-  constructor(prefix: string, dimensions: IDimensions, conversion: number = 1, offset: number = 0) {
+  constructor(prefix: string, dimensions: Partial<IDimensions>, conversion: number = 1, offset: number = 0) {
     super();
     this.prefix = prefix;
-    this.dimensions = dimensions;
+    this.dimensions = fromDimensions(dimensions);
     this.conversion = conversion;
     this.offset = offset;
   }
@@ -43,6 +43,6 @@ export class BaseUnit extends Unit {
   }
 
   public powerTo(power: number): Unit {
-    return new ComplexUnit([{ unit: this, power }]);
+    return power === 1 ? this : new ComplexUnit([{ unit: this, power }]);
   }
 }

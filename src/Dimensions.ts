@@ -19,6 +19,15 @@ export function createDimension(
   };
 }
 
+export function fromDimensions(dimensions: Partial<IDimensions>): IDimensions {
+  return createDimension(
+    dimensions.mass,
+    dimensions.length,
+    dimensions.time,
+    dimensions.temperature
+  );
+}
+
 export function equalDimensions(dimensions1: IDimensions, dimensions2: IDimensions): boolean {
   return (
     dimensions1.mass === dimensions2.mass &&
