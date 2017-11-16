@@ -2,20 +2,19 @@ import printf = require('printf');
 
 import { Unit } from './Unit';
 import * as Units from './UnitList';
-import { ComplexUnit } from './ComplexUnit';
 import { unitFromUnits } from './util';
 
 export class Value {
 
   /**
+   * Units of the value
+   */
+  public readonly unit: Unit;
+
+  /**
    * Numerical value in base units
    */
   private readonly value: number;
-
-  /**
-   * Units of the value
-   */
-  private readonly unit: Unit;
 
   constructor(value: number = 0, unit: Unit = Units.UNITLESS, isBaseUnit: boolean = false) {
     this.value = isBaseUnit ? value : unit.toBase(value);
@@ -53,7 +52,7 @@ export class Value {
   }
 
   public power(power: number): Value {
-    return new Value(this.value ** power, new ComplexUnit([{ unit: this.unit, power }]));
+    return new Value(this.value ** power, unitFromUnits(this.unit, power));
   }
 
   public to(unit: Unit): Value {
