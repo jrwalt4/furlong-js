@@ -1,7 +1,6 @@
 import groupBy = require('lodash.groupby');
 import { IComplexUnitPart, ComplexUnit } from './ComplexUnit';
 import { Unit } from './Unit';
-import { parseUnit } from './parseUnit';
 
 export interface INumeratorAndDenominator {
   numerator?: IComplexUnitPart[];
@@ -49,7 +48,7 @@ export function reduceUnitPowers(units: IComplexUnitPart[]): IComplexUnitPart[] 
   }, []);
 }
 
-export function unitFromUnits(...unitArgs: Array<Unit | string | number>): Unit {
+export function unitFromUnits(...unitArgs: Array<Unit | number>): Unit {
   let parts: IComplexUnitPart[] = [];
   let index = 0;
   while (index < unitArgs.length) {
@@ -57,7 +56,7 @@ export function unitFromUnits(...unitArgs: Array<Unit | string | number>): Unit 
     if (typeof unitPart === 'number') {
       throw new Error('Bad arguments');
     }
-    let unit: Unit = typeof unitPart === 'string' ? parseUnit(unitPart) : unitPart;
+    let unit: Unit = unitPart;
     let maybePower = unitArgs[index + 1];
     let power = 1;
     if (typeof maybePower === 'number') {
