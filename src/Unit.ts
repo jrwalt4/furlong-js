@@ -37,4 +37,8 @@ export abstract class Unit {
 
   public abstract format(): string;
 
+  public toString(): string {
+    return this.format();
+  }
+
 }

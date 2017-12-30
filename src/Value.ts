@@ -84,4 +84,8 @@ export class Value {
   public valueOf(): number {
     return this.value;
   }
+
+  public toString(): string {
+    return this.format();
+  }
 }
